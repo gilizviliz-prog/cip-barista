@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Barista CIP</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#11110f;color:#f7f0df;font-family:Tahoma,Arial,sans-serif}
+header{padding:16px;text-align:center;background:#1c1a14;border-bottom:1px solid #b9923d}
+.logo{font-size:27px;font-weight:bold;color:#f2c65c;letter-spacing:2px}
+.sub{font-size:12px;color:#aaa18d;margin-top:5px}
+.stats{display:flex;justify-content:space-around;padding:12px;background:#191814}
+.stat{text-align:center;font-size:12px;color:#aaa18d}
+.stat b{display:block;font-size:19px;color:#f3cd6c;margin-top:5px}
+main{max-width:620px;margin:auto;padding:12px}
+.panel{background:#1d1c18;border:1px solid #39352a;border-radius:14px;padding:13px;margin-bottom:12px}
+h3{font-size:15px;color:#e9c56c;margin:0 0 12px}
+.order{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.drink{font-size:38px}
+.ordername{font-size:16px;font-weight:bold}
+.small{font-size:11px;color:#aaa18d;margin-top:6px}
+.timer{width:49px;height:49px;border:3px solid #d4ab4d;border-radius:50%;display:grid;place-items:center;color:#f8d776;font-weight:bold;flex-shrink:0}
+button{font-family:inherit;cursor:pointer;border:1px solid #69552b;border-radius:10px;padding:12px 8px;background:#302817;color:#f7d77d;font-weight:bold}
+button:disabled{opacity:.3;cursor:default}
+button:active{transform:scale(.97)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.equip{min-height:105px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.equip span{font-size:28px}
+.equip small{color:#b9ad91;font-weight:normal}
+.wide{width:100%;margin-top:10px}
+.machine{background:linear-gradient(135deg,#45443e,#22221e);border:2px solid #777064;border-radius:12px;padding:12px;text-align:center}
+.machine-top{font-size:12px;color:#d7cba9;margin-bottom:12px}
+.group{display:inline-block;background:#161614;border:2px solid #9d927b;border-radius:7px;padding:12px 18px;margin:4px;color:#e5c76f}
+.cup{font-size:34px;min-height:42px}
+.worktop{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.slot{min-height:92px;background:#141411;border:1px dashed #645738;border-radius:9px;padding:8px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.slot strong{font-size:12px}
+.slot small{font-size:10px;color:#b8ac90}
+.notice{font-size:12px;line-height:1.9;color:#c8bea6}
+#message{min-height:42px;line-height:1.8;color:#f0d17a;font-size:12px}
+footer{text-align:center;color:#77705f;font-size:10px;padding:12px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">CIP</div>
+  <div style="font-weight:bold;margin-top:5px">BARISTA WORKSHOP</div>
+  <div class="sub">کارگاه آزمایشی باریستای کافه CIP</div>
+</header>
+
+<div class="stats">
+  <div class="stat">سفارش موفق<b id="done">0 / 100</b></div>
+  <div class="stat">زمان کل<b id="total">120</b></div>
+  <div class="stat">دستگاه<b>تک‌گروپ</b></div>
+</div>
+
+<main>
+  <section class="panel">
+    <h3>☕ سفارش مشتری</h3>
+    <div class="order">
+      <div class="drink" id="drink">☕</div>
+      <div style="flex:1">
+        <div class="ordername" id="orderName">اسپرسو سینگل</div>
+        <div class="small" id="orderInfo">سفارش را آماده کن و تحویل بده</div>
+      </div>
+      <div class="timer" id="timer">25</div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h3>⚙️ تجهیزات کارگاه</h3>
+    <div class="grid">
+      <button class="equip" id="grinder" onclick="grind()">
+        <span>⚙️</span>
+        آسیاب قهوه
+        <small id="grindLabel">آماده آسیاب</small>
+      </button>
+      <button class="equip" id="extract" onclick="extract()">
+        <span>☕</span>
+        عصاره‌گیری
+        <small id="extractLabel">ابتدا آسیاب کن</small>
+      </button>
+    </div>
+    <div class="machine" style="margin-top:10px">
+      <div class="machine-top">ESPRESSO MACHINE · 1 GROUP</div>
+      <div class="group">GROUP 1</div>
+      <div style="font-size:11px;color:#b9ad91">دستگاه تک‌گروپ آزمایشی</div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h3>🧰 میز کار و تحویل سفارش</h3>
+    <div class="worktop">
+      <button class="slot" id="cupSlot" onclick="deliver()">
+        <span class="cup" id="cup">—</span>
+        <strong id="cupName">فنجان خالی</strong>
+        <small id="cupHint">نوشیدنی اینجا می‌آید</small>
+      </button>
+      <div class="slot">
+        <span class="cup">🥛</span>
+        <strong>پیچر شیر</strong>
+        <small>در نسخه بعدی فعال می‌شود</small>
+      </div>
+      <div class="slot">
+        <span class="cup">🚰</span>
+        <strong>آب جوش</strong>
+        <small>در نسخه بعدی فعال می‌شود</small>
+      </div>
+    </div>
+    <button class="wide" onclick="startGame()" id="start">شروع چالش</button>
+    <div id="message">برای شروع، دکمه شروع چالش را بزن.</div>
+  </section>
+
+  <section class="panel">
+    <h3>📋 قوانین این نسخه</h3>
+    <div class="notice">
+      • ابتدا آسیاب و سپس عصاره‌گیری را انجام بده.<br>
+      • نوشیدنی آماده‌شده را روی میز تاچ کن تا تحویل شود.<br>
+      • هر سفارش زمان محدود دارد.<br>
+      • در این نسخه فقط سینگل و دبل فعال‌اند.<br>
+      • این بازی سکه تولید نمی‌کند و به بات کافه متصل نیست.
+    </div>
+  </section>
+</main>
+
+<footer>CAFÉ CIP · BARISTA TEST BUILD 0.1</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+let running=false, done=0, total=120, orderTime=25;
+let order=null, ground=false, ready=null, busy=false;
+let mainClock=null, orderClock=null, actionClock=null;
+const orders=[
+ {name:"اسپرسو سینگل",type:"single",icon:"☕",seconds:25},
+ {name:"اسپرسو دبل",type:"double",icon:"☕☕",seconds:30}
+];
+
+function msg(t){$("message").textContent=t}
+function update(){
+ $("done").textContent=done+" / 100";
+ $("total").textContent=total;
+ $("timer").textContent=orderTime;
+ $("drink").textContent=order?order.icon:"☕";
+ $("orderName").textContent=order?order.name:"سفارشی نیست";
+ $("orderInfo").textContent=running?"سفارش را پیش از پایان زمان تحویل بده":"برای شروع آماده‌ای؟";
+ $("grinder").disabled=!running||ground||busy||!!ready;
+ $("extract").disabled=!running||!ground||busy||!!ready;
+ $("cupSlot").disabled=!running||!ready;
+ $("grindLabel").textContent=ground?"قهوه آسیاب شد":"آماده آسیاب";
+ $("extractLabel").textContent=ground?"آماده عصاره‌گیری":"ابتدا آسیاب کن";
+ $("cup").textContent=ready?ready.icon:"—";
+ $("cupName").textContent=ready?ready.name:"فنجان خالی";
+ $("cupHint").textContent=ready?"برای تحویل تاچ کن":"نوشیدنی اینجا می‌آید";
+ $("start").textContent=running?"چالش در حال اجرا":"شروع چالش";
+}
+function clearClocks(){
+ clearInterval(mainClock);clearInterval(orderClock);clearTimeout(actionClock);
+ mainClock=orderClock=actionClock=null;
+}
+function startGame(){
+ clearClocks();running=true;done=0;total=120;
+ ground=false;ready=null;busy=false;
+ newOrder();
+ mainClock=setInterval(()=>{
+  if(!running)return;
+  total--;
+  if(total<=0){finish(false,"زمان کل تمام شد؛ چالش از ابتدا شروع می‌شود.");return}
+  update();
+ },1000);
+ $("start").disabled=true;
+ msg("چالش شروع شد! سفارش را آماده کن.");
+ update();
+}
+function newOrder(){
+ clearInterval(orderClock);
+ if(done>=100){finish(true,"تبریک! هر ۱۰۰ سفارش تکمیل شد.");return}
+ order=orders[Math.floor(Math.random()*orders.length)];
+ orderTime=order.seconds;
+ ground=false;ready=null;busy=false;
+ orderClock=setInterval(()=>{
+  if(!running)return;
+  orderTime--;
+  if(orderTime<=0){
+   finish(false,"زمان سفارش تمام شد؛ این دور از سفارش اول شروع می‌شود.");
+   return;
+  }
+  update();
+ },1000);
+ update();
+}
+function grind(){
+ if(!running||ground||busy||ready)return;
+ busy=true;msg("در حال آسیاب قهوه...");
+ update();
+ actionClock=setTimeout(()=>{
+  if(!running)return;
+  busy=false;ground=true;
+  msg("قهوه آماده شد؛ حالا عصاره‌گیری کن.");
+  update();
+ },3000);
+}
+function extract(){
+ if(!running||!ground||busy||ready)return;
+ busy=true;ground=false;
+ msg("در حال عصاره‌گیری...");
+ update();
+ actionClock=setTimeout(()=>{
+  if(!running)return;
+  busy=false;ready={...order};
+  msg("نوشیدنی آماده شد! فنجان را تاچ کن و تحویل بده.");
+  update();
+ },4000);
+}
+function deliver(){
+ if(!running||!ready)return;
+ if(ready.type!==order.type){
+  finish(false,"سفارش اشتباه بود؛ چالش از ابتدا شروع می‌شود.");
+  return;
+ }
+ done++;
+ clearInterval(orderClock);
+ ready=null;ground=false;
+ if(done>=100){finish(true,"عالی! ۱۰۰ سفارش را کامل کردی.");return}
+ msg("سفارش با موفقیت تحویل شد.");
+ newOrder();
+}
+function finish(win,text){
+ running=false;clearClocks();busy=false;
+ $("start").disabled=false;
+ $("start").textContent=win?"شروع دوباره":"تلاش دوباره";
+ order=null;ready=null;ground=false;
+ update();msg(text);
+}
+update();
+</script>
+</body>
+</html>
