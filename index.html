@@ -3,334 +3,581 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Café CIP | Barista Challenge</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>CIP Barista Challenge</title>
 <style>
-*{box-sizing:border-box}
-:root{--gold:#eac27b;--dark:#100e0c;--panel:#211b16;--line:#57442e}
-body{margin:0;background:radial-gradient(ellipse at 50% 0,#493322,#19120d 47%,#090807);color:#f8f1e5;font-family:Tahoma,Arial,sans-serif}
-button{font-family:inherit;touch-action:manipulation}
-.app{width:min(100%,520px);margin:auto;padding:10px}
-.brand{display:flex;align-items:center;justify-content:space-between;padding:3px 3px 10px}
-.logo{font-size:20px;font-weight:900;color:var(--gold);letter-spacing:1px}
-.logo small{display:block;font-size:9px;letter-spacing:3px;color:#a99a83;margin-top:4px}
-.pill{font-size:11px;color:#f2d5a1;border:1px solid #71532e;background:#281c10;border-radius:24px;padding:8px 11px}
-.hud{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.stat{padding:9px 4px;text-align:center;background:linear-gradient(145deg,#34281d,#18130f);border:1px solid var(--line);border-radius:12px;box-shadow:0 5px 12px #0005}
-.label{font-size:10px;color:#b9a58a;margin-bottom:5px}
-.value{font-size:17px;color:#ffda94;font-weight:bold}
-.progress{height:4px;background:#3b2c1d;border-radius:9px;overflow:hidden;margin-top:8px}
-.progress div{height:100%;background:linear-gradient(90deg,#b77b2d,#ffe6a5)}
-.section-title{display:flex;justify-content:space-between;align-items:center;margin:13px 2px 7px;font-size:12px;color:#e9c98e;font-weight:bold}
-.section-title small{font-size:10px;color:#a99a85;font-weight:normal}
-.orders{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-.order{position:relative;min-height:69px;padding:6px 3px;background:linear-gradient(145deg,#35281d,#17120f);border:1px solid #59432c;border-radius:11px;color:white;text-align:center}
-.order.selected{border-color:#ffe0a0;box-shadow:0 0 0 1px #eac27b55,0 0 13px #eac27b20}
-.order.done{opacity:.4}
-.order .num{position:absolute;right:6px;top:4px;font-size:9px;color:#b6a58b}
-.order .cup{font-size:23px;margin-top:8px;filter:drop-shadow(0 3px 2px #000)}
-.order .type{font-size:10px;font-weight:bold}
-.order .timer{font-size:10px;color:#ffcf7c;margin-top:4px}
-.order .ring{position:absolute;left:5px;top:5px;width:17px;height:17px;border:2px solid #dfb45d;border-right-color:#51402d;border-radius:50%}
-.order .ring.low{border-color:#ff6259;border-right-color:#67312b}
-.machine-area{margin-top:12px;border:1px solid #60482d;border-radius:15px;overflow:hidden;background:linear-gradient(#38291d,#211810 60%,#100c09);box-shadow:0 12px 28px #0008}
-.machine-header{padding:9px 11px 0;display:flex;justify-content:space-between;color:#edcc92;font-size:11px}
-.machine-header small{font-size:9px;color:#ad9a7e}
-.equipment{display:grid;grid-template-columns:34% 66%;align-items:end;padding:5px 4px 0;min-height:210px}
-.grinder-wrap,.machine-wrap{height:200px;position:relative;display:flex;align-items:flex-end;justify-content:center;cursor:pointer;transition:transform .1s}
-.grinder-wrap:active,.machine-wrap:active{transform:scale(.985)}
-.grinder-wrap svg,.machine-wrap svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 9px 6px #0009)}
-.tap-hint{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);white-space:nowrap;background:#100c09e8;border:1px solid #5a4328;border-radius:18px;padding:4px 7px;color:#e4c18a;font-size:9px}
-.counter{height:23px;background:linear-gradient(180deg,#d6b07b 0,#684626 12%,#392316 17%,#17100b 65%,#090706);border-top:2px solid #e0bc80;box-shadow:0 -4px 12px #0009}
-.machine-status{display:flex;justify-content:space-between;gap:4px;padding:8px 10px;background:#17110c;font-size:10px;color:#c2ae92}
-.machine-status b{color:#f5d59a}
-.upgrade-title{display:flex;justify-content:space-between;margin:12px 2px 7px;font-size:12px;color:#e8c88d}
-.upgrade-title small{font-size:10px;color:#a99a85}
-.upgrades{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.upgrade{display:flex;align-items:center;gap:8px;min-width:0;text-align:right;padding:9px 8px;background:linear-gradient(145deg,#35281d,#19130f);border:1px solid #4c3925;border-radius:11px;color:white}
-.upgrade:disabled{opacity:.45}
-.u-icon{font-size:22px}
-.u-info{min-width:0}
-.u-name{font-size:10px;font-weight:bold;margin-bottom:4px}
-.u-cost{font-size:10px;color:#f3cb7d}
-.u-level{font-size:9px;color:#ae9d84;margin-top:3px}
-.workbench{margin-top:12px;padding:10px;background:linear-gradient(#2d2117,#17110d);border:1px solid #4c3823;border-radius:13px}
-.workbench-head{display:flex;justify-content:space-between;font-size:11px;color:#e8c88e;margin-bottom:8px}
-.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.slot{height:76px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:#100c09;border:1px dashed #5b452d;border-radius:9px}
-.slot .cup{font-size:29px;filter:drop-shadow(0 4px 3px #000)}
-.cup-name{font-size:9px;color:#c7b18c}
-.deliver{font-size:10px;background:linear-gradient(#9bf1bf,#42bd83);color:#102016;border:0;border-radius:7px;padding:6px 7px;font-weight:bold}
-.empty{font-size:10px;color:#756653}
-.actions{display:grid;grid-template-columns:1fr auto;gap:7px;margin-top:9px}
-.primary{border:0;border-radius:10px;background:linear-gradient(135deg,#f5d79b,#bd843d);color:#211508;padding:12px;font-size:12px;font-weight:900}
-.secondary{border:1px solid #59432b;background:#241a11;color:#dfc7a1;border-radius:10px;padding:10px;font-size:11px}
-.message{min-height:25px;text-align:center;font-size:11px;color:#e9c886;padding:8px 2px 0}
-@media(max-width:370px){.equipment{min-height:185px}.grinder-wrap,.machine-wrap{height:178px}.value{font-size:15px}}
+:root{
+  --gold:#d8ae57;
+  --gold2:#ffe6a0;
+  --bg:#11100f;
+  --panel:#201d19;
+  --text:#f7f0e4;
+  --muted:#a99c88;
+  --green:#547c51;
+  --red:#b84e40;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{
+  margin:0;background:radial-gradient(ellipse at top,#33281b,#141210 55%,#090909);
+  color:var(--text);font-family:Tahoma,Arial,sans-serif;
+  min-height:100vh;user-select:none;overflow-x:hidden
+}
+button{font-family:inherit;cursor:pointer;touch-action:manipulation}
+.app{max-width:650px;margin:auto;padding:10px}
+header{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;margin-bottom:10px
+}
+.brand{font-size:19px;font-weight:900;color:var(--gold2);letter-spacing:1px}
+.brand small{display:block;font-size:9px;color:var(--muted);letter-spacing:2px;margin-top:3px}
+.stats{display:flex;gap:5px}
+.stat{
+  background:#211d18;border:1px solid #5e4b2e;border-radius:10px;
+  padding:7px 9px;text-align:center;min-width:65px
+}
+.stat span{display:block;font-size:9px;color:var(--muted);margin-bottom:4px}
+.stat b{font-size:13px;color:var(--gold2)}
+.section-title{font-size:12px;color:var(--gold2);margin:10px 2px 7px;font-weight:bold}
+.orders{
+  display:flex;gap:7px;overflow-x:auto;padding:2px 1px 8px;
+  scrollbar-width:thin;min-height:105px
+}
+.order{
+  flex:0 0 105px;background:linear-gradient(145deg,#30291f,#191613);
+  border:1px solid #55452d;border-radius:12px;padding:8px 7px;
+  text-align:center;position:relative;min-height:95px
+}
+.order.active{border-color:var(--gold);box-shadow:0 0 10px #b98b3330}
+.order.done{border-color:#698c5c}
+.order b{font-size:12px;display:block;margin:4px 0}
+.order .time{font-size:11px;color:#ffcc7b}
+.order .small{font-size:9px;color:var(--muted);margin-top:5px}
+.order .status{font-size:10px;color:#b5d6a5}
+.order .status.wait{color:#ffca81}
+.machine-area{
+  margin-top:5px;border:1px solid #473725;border-radius:14px;overflow:hidden;
+  background:linear-gradient(#211b15,#30251a 72%,#17120f);
+  position:relative
+}
+.scene-label{
+  padding:8px 10px 0;font-size:10px;color:#c9b38b;
+  display:flex;justify-content:space-between
+}
+.equipment-stage{
+  position:relative;padding:0 7px 0;min-height:260px;
+  display:flex;align-items:flex-end;justify-content:center
+}
+.equipment-row{
+  display:flex;align-items:flex-end;justify-content:center;
+  gap:4px;width:100%;position:relative;z-index:2;padding-bottom:28px
+}
+.device{
+  border:0;background:transparent;padding:0;position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  flex:1;min-width:0;max-width:170px;color:white;
+  filter:drop-shadow(0 7px 5px #0009)
+}
+.device:active{transform:translateY(2px)}
+.device svg{width:100%;height:auto;max-height:210px;overflow:visible}
+.device-name{
+  position:absolute;bottom:-20px;left:0;right:0;text-align:center;
+  font-size:10px;color:var(--gold2);font-weight:bold;white-space:nowrap
+}
+.second-grinder{display:none}
+.second-grinder.show{display:flex}
+.bar-top{
+  height:15px;position:absolute;bottom:25px;left:0;right:0;z-index:3;
+  background:linear-gradient(180deg,#b9a17b,#5f4a32 28%,#302216 65%,#100d0a);
+  border-top:2px solid #ddc49a;border-bottom:3px solid #080706;
+  box-shadow:0 5px 8px #000b
+}
+.bar-front{
+  position:absolute;bottom:0;left:0;right:0;height:27px;z-index:1;
+  background:linear-gradient(180deg,#493524,#21160f 45%,#0e0b09);
+  border-top:1px solid #9c7c52
+}
+.workbench{
+  margin-top:12px;border:1px solid #51402a;border-radius:13px;
+  background:linear-gradient(145deg,#29231b,#171411);padding:10px
+}
+.workbench-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.workbench-head b{font-size:12px;color:var(--gold2)}
+.workbench-head span{font-size:10px;color:var(--muted)}
+.cups{
+  display:flex;gap:8px;overflow-x:auto;padding:10px 0 4px;min-height:76px
+}
+.cup{
+  flex:0 0 82px;border:1px solid #635039;background:#17130f;
+  border-radius:9px;padding:6px 4px;text-align:center
+}
+.cup svg{width:38px;height:37px;display:block;margin:auto}
+.cup b{display:block;font-size:9px;margin:3px 0;color:#f4d9a2}
+.cup button{width:100%;font-size:9px;padding:6px 2px;border-radius:6px}
+.empty-work{font-size:11px;color:#8e8373;padding:15px 4px}
+button.action{
+  border:1px solid #8d6a32;background:linear-gradient(#e7c776,#b28a3d);
+  color:#20160a;font-weight:bold;border-radius:8px;padding:8px 10px;font-size:11px
+}
+button.secondary{
+  border:1px solid #514332;background:#29231b;color:#f3dfb5;
+  border-radius:8px;padding:8px 10px;font-size:11px
+}
+button:disabled{opacity:.38;cursor:not-allowed;filter:grayscale(.7)}
+.equip-upgrades{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:10px
+}
+.upgrade{
+  background:linear-gradient(145deg,#26211a,#171411);
+  border:1px solid #4e402c;border-radius:10px;padding:9px;
+  min-width:0
+}
+.upgrade b{display:block;font-size:11px;margin-bottom:5px}
+.upgrade p{font-size:9px;line-height:1.7;color:var(--muted);margin:0 0 7px}
+.upgrade button{width:100%;font-size:10px;padding:8px 4px}
+.controls{display:flex;gap:7px;margin-top:10px}
+.controls button{flex:1}
+.notice{font-size:10px;color:#b9ab94;line-height:1.8;margin-top:9px;text-align:center}
+.toast{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:#29231b;border:1px solid var(--gold);color:#ffe6a0;
+  border-radius:10px;padding:11px 16px;font-size:12px;z-index:20;
+  display:none;max-width:90%;text-align:center;box-shadow:0 5px 20px #0009
+}
+.modal{
+  position:fixed;inset:0;background:#000c;z-index:30;display:none;
+  align-items:center;justify-content:center;padding:20px
+}
+.modal-box{
+  max-width:350px;width:100%;background:#211b14;border:1px solid var(--gold);
+  border-radius:15px;padding:20px;text-align:center
+}
+.modal-box h2{color:var(--gold2);font-size:18px}
+.modal-box p{font-size:12px;line-height:2;color:#d7c7ad}
+@media(min-width:500px){
+ .equipment-stage{min-height:285px}
+ .device svg{max-height:230px}
+ .order{flex-basis:115px}
+}
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="brand">
-    <div class="logo">CAFÉ CIP<small>BARISTA CHALLENGE</small></div>
-    <div class="pill">☕ مسیر حرفه‌ای شدن</div>
+<header>
+  <div class="brand">CIP <small>BARISTA CHALLENGE</small></div>
+  <div class="stats">
+    <div class="stat"><span>سکه</span><b id="coins">۵۵۰٬۰۰۰</b></div>
+    <div class="stat"><span>سفارش</span><b id="score">۰ / ۱۰۰</b></div>
+    <div class="stat"><span>زمان</span><b id="timer">۱۲۰</b></div>
   </div>
-  <div class="hud">
-    <div class="stat"><div class="label">🪙 سکه</div><div class="value" id="coins">550000</div></div>
-    <div class="stat"><div class="label">🎯 سفارش‌ها</div><div class="value"><span id="score">۰</span><small> / 100</small></div></div>
-    <div class="stat"><div class="label">⏱ زمان</div><div class="value" id="time">120</div></div>
-  </div>
-  <div class="progress"><div id="progress"></div></div>
+</header>
 
-  <div class="section-title"><span>📋 سفارش مشتری‌ها</span><small id="orderCount">۰ سفارش فعال</small></div>
-  <div class="orders" id="orders"></div>
+<div class="section-title">سفارش‌های مشتری‌ها</div>
+<div class="orders" id="orders"></div>
 
-  <div class="machine-area">
-    <div class="machine-header"><span>☕ ایستگاه باریستا</span><small>روی تجهیزات ضربه بزن</small></div>
-    <div class="equipment">
-      <div class="grinder-wrap" id="grinderTap" role="button" aria-label="آسیاب قهوه">
-        <svg viewBox="0 0 160 225" xmlns="http://www.w3.org/2000/svg">
+<div class="section-title">ایستگاه آماده‌سازی قهوه</div>
+<div class="machine-area">
+  <div class="scene-label"><span>ایستگاه اسپرسو CIP</span><span id="machineInfo">۱ گروپ · آسیاب سطح ۱</span></div>
+  <div class="equipment-stage">
+    <div class="equipment-row">
+      <button class="device second-grinder" id="grinder2" aria-label="آسیاب دوم" onclick="grind(1)">
+        <svg viewBox="0 0 150 200" role="img" aria-label="آسیاب قهوه دوم">
           <defs>
-            <linearGradient id="grMetal" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#111413"/><stop offset=".12" stop-color="#777c78"/><stop offset=".25" stop-color="#292d2b"/><stop offset=".48" stop-color="#141716"/><stop offset=".72" stop-color="#686d68"/><stop offset=".9" stop-color="#242826"/><stop offset="1" stop-color="#101211"/></linearGradient>
-            <linearGradient id="grGlass" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#1d1710"/><stop offset=".18" stop-color="#76502e"/><stop offset=".43" stop-color="#362314"/><stop offset=".72" stop-color="#9a6a3c"/><stop offset="1" stop-color="#24170d"/></linearGradient>
-            <linearGradient id="grBase" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#727773"/><stop offset=".25" stop-color="#343936"/><stop offset="1" stop-color="#0c0f0e"/></linearGradient>
-            <linearGradient id="grLight" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#fff" stop-opacity=".5"/><stop offset=".4" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".2"/></linearGradient>
-            <linearGradient id="grBean" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#aa7747"/><stop offset=".45" stop-color="#674021"/><stop offset="1" stop-color="#26160b"/></linearGradient>
-            <filter id="grBlur"><feGaussianBlur stdDeviation="4"/></filter>
+            <linearGradient id="g2metal" x1="0" y1="0" x2="1" y2="0">
+              <stop stop-color="#292b2d"/><stop offset=".25" stop-color="#aeb0ae"/>
+              <stop offset=".5" stop-color="#46494a"/><stop offset=".8" stop-color="#c9c9c3"/><stop offset="1" stop-color="#343536"/>
+            </linearGradient>
+            <linearGradient id="g2hopper" x1="0" y1="0" x2="1" y2="0">
+              <stop stop-color="#30231a"/><stop offset=".4" stop-color="#986b3f"/><stop offset="1" stop-color="#241910"/>
+            </linearGradient>
           </defs>
-          <ellipse cx="81" cy="212" rx="58" ry="8" fill="#000" opacity=".65" filter="url(#grBlur)"/>
-          <path d="M47 16 Q47 9 57 9 H104 Q114 9 114 17 L105 68 Q103 80 94 82 H67 Q56 80 54 68Z" fill="url(#grGlass)" stroke="#b58b5b" stroke-width="1.5"/>
-          <ellipse cx="80" cy="16" rx="34" ry="8" fill="#5a3d25" stroke="#b8a080" stroke-width="2"/>
-          <ellipse cx="80" cy="16" rx="28" ry="5" fill="#20150d"/>
-          {#each Array.from({length:24},(_,i)=>i) as i}
-            <ellipse cx={55+(i%7)*7.5} cy={22+Math.floor(i/7)*12+(i%2)*2} rx="4.1" ry="5.1" fill="url(#grBean)" stroke="#ad7742" stroke-width=".5" transform={`rotate(${i*19} ${55+(i%7)*7.5} ${22+Math.floor(i/7)*12+(i%2)*2})`}/>
-          {/each}
-          <path d="M53 63 L107 63 L113 83 L47 83Z" fill="url(#grMetal)" stroke="#969b96"/>
-          <path d="M48 80 Q80 86 112 80 L116 93 L44 93Z" fill="#171b19" stroke="#717772"/>
-          <rect x="38" y="87" width="84" height="92" rx="10" fill="url(#grMetal)" stroke="#929792" stroke-width="1.6"/>
-          <path d="M43 96 Q80 89 117 96 L117 105 Q80 99 43 105Z" fill="#fff" opacity=".08"/>
-          <rect x="46" y="105" width="68" height="49" rx="5" fill="#101312" stroke="#666b66" stroke-width="1.5"/>
-          <rect x="50" y="109" width="60" height="41" rx="3" fill="#202522"/>
-          <rect x="54" y="113" width="52" height="33" rx="2" fill="#0e1110"/>
-          <circle cx="80" cy="129" r="12" fill="#080a09" stroke="#727772" stroke-width="2"/>
-          <circle cx="80" cy="129" r="8" fill="#252b28" stroke="#a8aca5"/>
-          <path d="M80 120 L83 129 L80 137 L77 129Z" fill="#d5b879"/>
-          <circle cx="80" cy="129" r="2.5" fill="#f0d8a1"/>
-          <rect x="49" y="158" width="62" height="13" rx="3" fill="#080a09" stroke="#6e746f"/>
-          <circle cx="57" cy="164.5" r="2" fill="#55d69a"/>
-          <circle cx="65" cy="164.5" r="2" fill="#d9b35e"/>
-          <rect x="76" y="161" width="29" height="6" rx="2" fill="#292e2b" stroke="#5d625e"/>
-          <path d="M43 91 L43 174" stroke="url(#grLight)" stroke-width="6"/>
-          <path d="M115 94 L115 173" stroke="#fff" stroke-opacity=".13" stroke-width="3"/>
-          <path d="M38 177 L122 177 L130 196 Q132 204 120 205 H40 Q28 204 30 196Z" fill="url(#grBase)" stroke="#858b85" stroke-width="1.5"/>
-          <path d="M39 182 L121 182 L124 194 L36 194Z" fill="#141816" stroke="#525853"/>
-          <path d="M46 185 H114" stroke="#c2c7bf" stroke-opacity=".45"/>
-          <rect x="57" y="186" width="46" height="5" rx="2" fill="#373c38"/>
-          <path d="M49 207 H111 L107 212 H53Z" fill="#080a09"/>
-          <text x="80" y="101" font-size="5.5" text-anchor="middle" fill="#e3d0ae" letter-spacing="1">CIP GRINDER</text>
+          <path d="M48 18 L103 18 L96 66 Q75 81 54 66Z" fill="url(#g2hopper)" stroke="#bda17a" stroke-width="2"/>
+          <ellipse cx="75" cy="18" rx="27" ry="7" fill="#d4c3a2" stroke="#443426" stroke-width="2"/>
+          <path d="M53 68 L97 68 L106 87 L104 148 L46 148 L44 87Z" fill="url(#g2metal)" stroke="#141414" stroke-width="2"/>
+          <rect x="53" y="83" width="44" height="23" rx="3" fill="#191b1b" stroke="#8b8d8c"/>
+          <circle cx="75" cy="94" r="5" fill="#c7a65d"/>
+          <path d="M49 113 L101 113 L97 139 L53 139Z" fill="#303132"/>
+          <path d="M59 148 L91 148 L91 162 L59 162Z" fill="#0e0f0f"/>
+          <path d="M55 162 L95 162 L102 171 L48 171Z" fill="url(#g2metal)" stroke="#111"/>
+          <ellipse cx="75" cy="173" rx="28" ry="5" fill="#080808" opacity=".7"/>
+          <path d="M67 139 L83 139 L88 154 L62 154Z" fill="#171717"/>
         </svg>
-        <div class="tap-hint" id="grindHint">⚙️ آسیاب قهوه</div>
-      </div>
+        <span class="device-name">آسیاب دوم</span>
+      </button>
 
-      <div class="machine-wrap" id="machineTap" role="button" aria-label="دستگاه اسپرسو">
-        <svg viewBox="0 0 320 230" xmlns="http://www.w3.org/2000/svg">
+      <button class="device" id="grinder1" aria-label="آسیاب اول" onclick="grind(0)">
+        <svg viewBox="0 0 150 200" role="img" aria-label="آسیاب قهوه">
           <defs>
-            <linearGradient id="esSide" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#121514"/><stop offset=".15" stop-color="#777d78"/><stop offset=".3" stop-color="#2b302d"/><stop offset=".58" stop-color="#141716"/><stop offset=".82" stop-color="#565c57"/><stop offset="1" stop-color="#171a18"/></linearGradient>
-            <linearGradient id="esFront" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#202422"/><stop offset=".15" stop-color="#6e746e"/><stop offset=".3" stop-color="#252a27"/><stop offset=".65" stop-color="#3d433e"/><stop offset=".85" stop-color="#202421"/><stop offset="1" stop-color="#111412"/></linearGradient>
-            <linearGradient id="esTop" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f3f0e6"/><stop offset=".16" stop-color="#a4aaa3"/><stop offset=".5" stop-color="#535953"/><stop offset="1" stop-color="#202522"/></linearGradient>
-            <linearGradient id="esTray" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c8cbc2"/><stop offset=".15" stop-color="#727871"/><stop offset=".55" stop-color="#282d29"/><stop offset="1" stop-color="#0e1110"/></linearGradient>
-            <linearGradient id="esScreen" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#343a35"/><stop offset=".5" stop-color="#0d1110"/><stop offset="1" stop-color="#242a25"/></linearGradient>
-            <linearGradient id="esCup" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#a3a49b"/><stop offset=".25" stop-color="#f4eee0"/><stop offset=".75" stop-color="#d5cdbb"/><stop offset="1" stop-color="#85877f"/></linearGradient>
-            <filter id="esBlur"><feGaussianBlur stdDeviation="4"/></filter>
+            <linearGradient id="g1metal" x1="0" y1="0" x2="1" y2="0">
+              <stop stop-color="#242526"/><stop offset=".22" stop-color="#a6a8a5"/>
+              <stop offset=".47" stop-color="#3b3d3e"/><stop offset=".8" stop-color="#c5c6c1"/><stop offset="1" stop-color="#343536"/>
+            </linearGradient>
+            <linearGradient id="g1hopper" x1="0" y1="0" x2="1" y2="0">
+              <stop stop-color="#2d2017"/><stop offset=".4" stop-color="#a77b4b"/><stop offset="1" stop-color="#271b12"/>
+            </linearGradient>
           </defs>
-          <ellipse cx="161" cy="217" rx="143" ry="9" fill="#000" opacity=".68" filter="url(#esBlur)"/>
-          <!-- Machine body and casing -->
-          <path d="M20 50 Q20 37 35 35 L281 35 Q296 38 296 51 L289 157 L27 157Z" fill="url(#esSide)" stroke="#b5bab2" stroke-width="1.5"/>
-          <path d="M29 45 L287 45 L282 60 L34 60Z" fill="url(#esTop)" stroke="#c6c9c0"/>
-          <path d="M34 61 L282 61 L278 76 L38 76Z" fill="#171b19" stroke="#70766f"/>
-          <path d="M38 63 H278" stroke="#fff" stroke-opacity=".32"/>
-          <path d="M40 78 L276 78 L272 146 L44 146Z" fill="url(#esFront)" stroke="#8c928a" stroke-width="1"/>
-          <path d="M45 83 H271 V91 H45Z" fill="#d5d8ce" opacity=".13"/>
-          <rect x="49" y="94" width="222" height="43" rx="3" fill="#0d100f" stroke="#626962"/>
-          <rect x="54" y="98" width="212" height="34" rx="2" fill="url(#esScreen)" stroke="#3f4540"/>
-          <path d="M59 101 H261" stroke="#fff" stroke-opacity=".15"/>
-          <rect x="64" y="104" width="58" height="23" rx="2" fill="#101614" stroke="#71796f"/>
-          <text x="93" y="113" font-size="6" text-anchor="middle" fill="#d9c18a" letter-spacing="1">CIP</text>
-          <text x="93" y="121" font-size="4.5" text-anchor="middle" fill="#9ea99e">PROFESSIONAL</text>
-          <circle cx="143" cy="115" r="5" fill="#c5c9c0" stroke="#f2f0e6"/>
-          <circle cx="143" cy="115" r="2.5" fill="#3b423d"/>
-          <circle cx="159" cy="115" r="5" fill="#a83b2b" stroke="#d98d74"/>
-          <circle cx="159" cy="115" r="2" fill="#45160f"/>
-          <circle cx="175" cy="115" r="5" fill="#bba26a" stroke="#f0dda2"/>
-          <circle cx="175" cy="115" r="2" fill="#554322"/>
-          <rect x="191" y="105" width="64" height="21" rx="2" fill="#101513" stroke="#737970"/>
-          <text x="223" y="113" font-size="5" text-anchor="middle" fill="#91dcb0">ESPRESSO</text>
-          <path d="M198 118 H248" stroke="#557c61" stroke-width="1"/>
-          <path d="M51 140 H269" stroke="#d9ded4" stroke-opacity=".5"/>
-          <!-- Group head left -->
-          <path d="M78 135 L96 135 L98 151 L76 151Z" fill="#161a18" stroke="#b0b6ad"/>
-          <rect x="79" y="146" width="16" height="8" rx="2" fill="#777e76" stroke="#d7d9cf"/>
-          <path d="M83 151 L91 151 L93 165 L81 165Z" fill="#222724" stroke="#9ca39a"/>
-          <path d="M82 164 Q87 169 93 164 L96 170 L79 170Z" fill="#454c45" stroke="#a8afa4"/>
-          <!-- Group head right -->
-          <path d="M216 135 L234 135 L236 151 L214 151Z" fill="#161a18" stroke="#b0b6ad"/>
-          <rect x="217" y="146" width="16" height="8" rx="2" fill="#777e76" stroke="#d7d9cf"/>
-          <path d="M221 151 L229 151 L231 165 L219 165Z" fill="#222724" stroke="#9ca39a"/>
-          <path d="M220 164 Q225 169 231 164 L234 170 L217 170Z" fill="#454c45" stroke="#a8afa4"/>
-          <!-- Portafilter handles -->
-          <path d="M80 155 L69 158 L57 170 Q53 175 58 179 L64 181 L82 166Z" fill="#171a18" stroke="#a3a99f" stroke-width="1.5"/>
-          <path d="M58 173 L63 176" stroke="#777e76" stroke-width="2"/>
-          <path d="M218 155 L207 158 L195 170 Q191 175 196 179 L202 181 L220 166Z" fill="#171a18" stroke="#a3a99f" stroke-width="1.5"/>
-          <path d="M196 173 L201 176" stroke="#777e76" stroke-width="2"/>
-          <!-- Steam wand -->
-          <path d="M255 88 L263 89 L268 143 L263 157 L257 155 L261 143Z" fill="#d1d4ca" stroke="#777e76"/>
-          <path d="M258 156 L264 158 L260 170 L255 168Z" fill="#9da39a" stroke="#d9ddd2"/>
-          <path d="M254 87 Q250 83 255 80 L267 80 Q271 83 267 88Z" fill="#303632" stroke="#9ea59b"/>
-          <!-- Drip tray -->
-          <path d="M31 174 L289 174 L297 188 Q299 195 288 197 L32 197 Q21 195 23 188Z" fill="url(#esTray)" stroke="#b6bbb0" stroke-width="1.5"/>
-          <path d="M34 177 H286" stroke="#fff" stroke-opacity=".4"/>
-          <path d="M40 182 H280 M43 187 H277 M47 192 H273" stroke="#080b0a" stroke-width="1.7"/>
-          <path d="M43 180 H277" stroke="#c3c7bd" stroke-opacity=".4"/>
-          <!-- Feet and highlights -->
-          <path d="M37 198 H73 L69 207 H42Z" fill="#101311" stroke="#5e655d"/>
-          <path d="M247 198 H283 L278 207 H251Z" fill="#101311" stroke="#5e655d"/>
-          <path d="M31 52 L31 152" stroke="#fff" stroke-opacity=".32" stroke-width="3"/>
-          <path d="M286 51 L282 151" stroke="#000" stroke-opacity=".5" stroke-width="4"/>
-          <path d="M45 39 H274" stroke="#fff" stroke-opacity=".3"/>
-          <path d="M102 35 L102 25 Q102 18 111 18 H205 Q214 18 214 25 V35Z" fill="#262b27" stroke="#858b82"/>
-          <rect x="111" y="22" width="94" height="10" rx="2" fill="#101412" stroke="#646b62"/>
-          <path d="M119 26 H196" stroke="#c4c8bc" stroke-opacity=".45"/>
-          <circle cx="157" cy="27" r="2.5" fill="#e1bf74"/>
-          <text x="160" y="72" font-size="6.5" text-anchor="middle" fill="#ead4a6" letter-spacing="2">CIP PROFESSIONAL</text>
+          <path d="M48 18 L102 18 L96 66 Q75 81 54 66Z" fill="url(#g1hopper)" stroke="#bda17a" stroke-width="2"/>
+          <ellipse cx="75" cy="18" rx="27" ry="7" fill="#d4c3a2" stroke="#443426" stroke-width="2"/>
+          <path d="M53 68 L97 68 L106 87 L104 148 L46 148 L44 87Z" fill="url(#g1metal)" stroke="#141414" stroke-width="2"/>
+          <rect x="53" y="83" width="44" height="23" rx="3" fill="#191b1b" stroke="#8b8d8c"/>
+          <circle cx="75" cy="94" r="5" fill="#c7a65d"/>
+          <path d="M49 113 L101 113 L97 139 L53 139Z" fill="#303132"/>
+          <path d="M59 148 L91 148 L91 162 L59 162Z" fill="#0e0f0f"/>
+          <path d="M55 162 L95 162 L102 171 L48 171Z" fill="url(#g1metal)" stroke="#111"/>
+          <ellipse cx="75" cy="173" rx="28" ry="5" fill="#080808" opacity=".7"/>
+          <path d="M67 139 L83 139 L88 154 L62 154Z" fill="#171717"/>
         </svg>
-        <div class="tap-hint" id="machineHint">☕ عصاره‌گیری اسپرسو</div>
-      </div>
-    </div>
-    <div class="counter"></div>
-    <div class="machine-status">
-      <span>آسیاب: <b id="grinderStatus">سطح ۱ · ۱ ثانیه</b></span>
-      <span>عصاره: <b id="machineStatus">۱ گروپ · ۲ ثانیه</b></span>
-    </div>
-  </div>
+        <span class="device-name" id="grinder1Name">آسیاب · سطح ۱</span>
+      </button>
 
-  <div class="upgrade-title"><span>⬆️ ارتقای تجهیزات</span><small>موجودی آزمایشی</small></div>
-  <div class="upgrades">
-    <button class="upgrade" id="upgradeGrinder"><span class="u-icon">⚙️</span><span class="u-info"><div class="u-name">ارتقای آسیاب</div><div class="u-cost" id="grinderCost"></div><div class="u-level" id="grinderLevel"></div></span></button>
-    <button class="upgrade" id="upgradeMachine"><span class="u-icon">☕</span><span class="u-info"><div class="u-name">ارتقای دستگاه</div><div class="u-cost" id="machineCost"></div><div class="u-level" id="machineLevel"></div></span></button>
-    <button class="upgrade" id="upgradeSecondGrinder"><span class="u-icon">➕</span><span class="u-info"><div class="u-name">خرید آسیاب دوم</div><div class="u-cost" id="secondGrinderCost"></div><div class="u-level" id="secondGrinderLevel"></div></span></button>
-    <button class="upgrade" id="upgradeMachineFinish"><span class="u-icon">✨</span><span class="u-info"><div class="u-name">بهبود دستگاه</div><div class="u-cost">🪙 5,000</div><div class="u-level">ارتقای آزمایشی</div></span></button>
-  </div>
-
-  <div class="workbench">
-    <div class="workbench-head"><span>🥄 میز آماده‌سازی</span><span id="readyCount">۰ فنجان آماده</span></div>
-    <div class="slots" id="slots"></div>
-    <div class="actions"><button class="primary" id="startBtn">▶ شروع چالش ۱۲۰ ثانیه‌ای</button><button class="secondary" id="resetBtn">از نو</button></div>
-    <div class="message" id="message">سفارش را انتخاب کن؛ آسیاب کن، عصاره بگیر و تحویل بده.</div>
+      <button class="device" id="espresso" aria-label="دستگاه اسپرسو" onclick="extract()">
+        <svg id="espressoSvg" viewBox="0 0 320 220" role="img" aria-label="دستگاه اسپرسوساز">
+          <defs>
+            <linearGradient id="esSteel" x1="0" y1="0" x2="1" y2="0">
+              <stop stop-color="#292b2c"/><stop offset=".16" stop-color="#9da09e"/>
+              <stop offset=".31" stop-color="#555858"/><stop offset=".58" stop-color="#d0d0ca"/>
+              <stop offset=".77" stop-color="#5b5d5d"/><stop offset="1" stop-color="#252728"/>
+            </linearGradient>
+            <linearGradient id="esTop" x1="0" y1="0" x2="0" y2="1">
+              <stop stop-color="#d2d2cc"/><stop offset=".3" stop-color="#555756"/><stop offset="1" stop-color="#252626"/>
+            </linearGradient>
+            <linearGradient id="esPanel" x1="0" y1="0" x2="0" y2="1">
+              <stop stop-color="#454849"/><stop offset=".5" stop-color="#17191a"/><stop offset="1" stop-color="#3b3e3e"/>
+            </linearGradient>
+          </defs>
+          <ellipse cx="160" cy="193" rx="150" ry="11" fill="#000" opacity=".5"/>
+          <path d="M22 42 Q24 27 43 27 L277 27 Q296 27 298 42 L303 159 L17 159Z" fill="url(#esSteel)" stroke="#101111" stroke-width="3"/>
+          <path d="M32 40 L288 40 L286 58 L34 58Z" fill="url(#esTop)" stroke="#777" stroke-width="1"/>
+          <rect x="39" y="62" width="242" height="13" rx="2" fill="#171919"/>
+          <rect x="42" y="78" width="236" height="65" rx="3" fill="url(#esPanel)" stroke="#b8b8b0" stroke-width="1.5"/>
+          <g id="groupVisuals"></g>
+          <rect x="28" y="146" width="264" height="15" rx="2" fill="#252728" stroke="#c3c3bc"/>
+          <path d="M35 161 L285 161 L277 177 L43 177Z" fill="url(#esSteel)" stroke="#111"/>
+          <path d="M42 178 L278 178 L271 188 L49 188Z" fill="#171919"/>
+          <g opacity=".85">
+            <rect x="55" y="48" width="45" height="4" rx="2" fill="#e3e1d8"/>
+            <rect x="112" y="48" width="45" height="4" rx="2" fill="#e3e1d8"/>
+            <rect x="169" y="48" width="45" height="4" rx="2" fill="#e3e1d8"/>
+            <rect x="226" y="48" width="36" height="4" rx="2" fill="#e3e1d8"/>
+          </g>
+          <circle cx="270" cy="88" r="5" fill="#d5b05a" stroke="#201c14" stroke-width="2"/>
+          <circle cx="270" cy="105" r="5" fill="#7f9b70" stroke="#201c14" stroke-width="2"/>
+          <path d="M285 89 L305 100 L303 115 L284 109Z" fill="#17191a" stroke="#aaa"/>
+          <path d="M294 113 L302 121 L298 145 L290 145Z" fill="#c6c6be"/>
+          <g id="portafilters"></g>
+          <rect x="30" y="151" width="260" height="5" fill="#dddcd3" opacity=".8"/>
+          <g id="steamWands"></g>
+          <text x="160" y="21" fill="#d8b76c" font-size="12" font-weight="bold" text-anchor="middle">CIP PROFESSIONAL</text>
+        </svg>
+        <span class="device-name" id="machineName">اسپرسوساز · ۱ گروپ</span>
+      </button>
+    </div>
+    <div class="bar-top"></div>
+    <div class="bar-front"></div>
   </div>
 </div>
+
+<div class="workbench">
+  <div class="workbench-head">
+    <b>میز کار · فنجان‌های آماده</b>
+    <span id="readyCount">۰ فنجان</span>
+  </div>
+  <div class="cups" id="cups">
+    <div class="empty-work">بعد از آسیاب و عصاره‌گیری، فنجان آماده اینجا قرار می‌گیرد.</div>
+  </div>
+</div>
+
+<div class="section-title">ارتقای تجهیزات</div>
+<div class="equip-upgrades" id="upgrades"></div>
+
+<div class="controls">
+  <button class="action" id="startBtn" onclick="startRun()">شروع چالش ۱۲۰ ثانیه‌ای</button>
+  <button class="secondary" onclick="showRules()">قوانین بازی</button>
+</div>
+<div class="notice">
+  روی آسیاب بزن تا قهوه آسیاب شود؛ سپس روی دستگاه اسپرسو بزن.
+  فنجان آماده روی میز کار می‌آید و باید سفارش مربوط به آن را تحویل بدهی.
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <h2 id="modalTitle">چالش CIP</h2>
+    <p id="modalText"></p>
+    <button class="action" onclick="closeModal()">باشه</button>
+  </div>
+</div>
+
 <script>
-const $=id=>document.getElementById(id);
-let coins=550000,score=0,timeLeft=120,run=false,runTimer=null,orderTimer=null;
-let grinderLevel=1,groups=1,secondGrinder=false,qualityUpgrade=false;
-let orders=[],selectedOrder=null,groundFor=null,busyGrind=false,busyExtract=false,readyCups=[],nextId=1;
-const grinderTimes={1:1,2:.7,3:.4};
-const machineTimes={1:2,2:1.2,3:.8,4:.5};
-const grinderCosts={1:8000,2:16000};
-const machineCosts={1:15000,2:35000,3:70000};
-const secondGrinderPrice=20000;
-const fa=n=>Number(n).toLocaleString('fa-IR');
-function say(t){$('message').textContent=t}
-function activeOrders(){return orders.filter(o=>!o.done)}
-function makeOrder(){return{id:nextId++,type:0,remaining:Math.max(9,18-groups),done:false}}
-function startRun(){
- clearInterval(runTimer);clearInterval(orderTimer);score=0;timeLeft=120;run=true;orders=[];readyCups=[];selectedOrder=null;groundFor=null;busyGrind=false;busyExtract=false;nextId=1;
- for(let i=0;i<Math.min(groups+1,5);i++)orders.push(makeOrder());
- selectedOrder=orders[0]?.id||null;renderAll();say('چالش شروع شد! سفارش‌ها زمان محدود دارند.');
- runTimer=setInterval(()=>{if(!run)return;timeLeft--;if(timeLeft<=0){timeLeft=0;endRun('زمان تمام شد! ارتقاها و سکه‌ها حفظ شدند.')}$('time').textContent=fa(timeLeft);$('progress').style.width=(timeLeft/120*100)+'%'},1000);
- orderTimer=setInterval(()=>{if(!run)return;let expired=false;orders.forEach(o=>{if(!o.done){o.remaining--;if(o.remaining<=0)expired=true}});updateOrderTimers();if(expired)endRun('یک سفارش دیر شد! ارتقاها و سکه‌ها حفظ شدند.')},1000);
+"use strict";
+
+const $ = id => document.getElementById(id);
+const fmt = n => Math.floor(n).toLocaleString("fa-IR");
+const state = {
+  coins:550000,
+  score:0,
+  run:false,
+  time:120,
+  groups:1,
+  grinderLevel:1,
+  secondGrinder:false,
+  quality:1,
+  orders:[],
+  cups:[],
+  nextOrderId:1,
+  nextCupId:1,
+  clock:null,
+  orderClock:null,
+  busyGrinders:[false,false],
+  extracting:false,
+  groundBeans:0
+};
+
+const upgradeDefs = [
+ {id:"g2",title:"ارتقای آسیاب اول",desc:"سرعت آسیاب بیشتر می‌شود.",price:8000},
+ {id:"g3",title:"ارتقای آسیاب اول · سطح ۳",desc:"بالاترین سرعت آسیاب.",price:16000},
+ {id:"second",title:"خرید آسیاب دوم",desc:"آسیاب دوم کنار آسیاب اول فعال می‌شود.",price:20000},
+ {id:"group2",title:"ارتقای دستگاه به ۲ گروپ",desc:"گروپ دوم واقعی روی دستگاه ظاهر می‌شود.",price:15000},
+ {id:"group3",title:"ارتقای دستگاه به ۳ گروپ",desc:"گروپ سوم و نازل بخار فعال می‌شود.",price:35000},
+ {id:"group4",title:"ارتقای دستگاه به ۴ گروپ",desc:"گروپ چهارم و آب داغ فعال می‌شود.",price:70000},
+ {id:"quality",title:"ارتقای کیفیت",desc:"بهبود نمای تجهیزات؛ فعلاً اثر نمایشی.",price:5000}
+];
+
+function toast(msg){
+  const el=$("toast");el.textContent=msg;el.style.display="block";
+  clearTimeout(toast._timer);
+  toast._timer=setTimeout(()=>el.style.display="none",2100);
 }
-function endRun(msg){run=false;clearInterval(runTimer);clearInterval(orderTimer);$('startBtn').textContent='▶ تلاش دوباره';say(msg);renderAll()}
+function showModal(title,text){
+  $("modalTitle").textContent=title;$("modalText").textContent=text;$("modal").style.display="flex";
+}
+function closeModal(){$("modal").style.display="none";}
+function showRules(){
+  showModal("قوانین چالش CIP",
+  "هر سفارش اسپرسو تایمر مستقل دارد. برای آماده‌سازی، روی آسیاب بزن و بعد از آسیاب‌شدن، روی دستگاه اسپرسو بزن. فنجان آماده روی میز کار می‌آید. فنجان را برای سفارش مناسب تحویل بده. اگر تایمر یک سفارش تمام شود، چالش از سفارش اول شروع می‌شود؛ سکه‌ها و ارتقاها حفظ می‌شوند. تکمیل سفارش سکه جایزه نمی‌دهد.");
+}
+function renderStats(){
+  $("coins").textContent=fmt(state.coins);
+  $("score").textContent=fmt(state.score)+" / ۱۰۰";
+  $("timer").textContent=fmt(state.time);
+  $("machineInfo").textContent=state.groups+" گروپ · آسیاب سطح "+state.grinderLevel;
+  $("grinder1Name").textContent="آسیاب · سطح "+state.grinderLevel;
+  $("machineName").textContent="اسپرسوساز · "+state.groups+" گروپ";
+  $("grinder2").classList.toggle("show",state.secondGrinder);
+  $("readyCount").textContent=fmt(state.cups.length)+" فنجان";
+  $("startBtn").textContent=state.run?"چالش در حال اجراست":"شروع چالش ۱۲۰ ثانیه‌ای";
+  $("startBtn").disabled=state.run;
+}
+function renderGroups(){
+  const groupRoot=$("groupVisuals");
+  const pfRoot=$("portafilters");
+  const steamRoot=$("steamWands");
+  groupRoot.innerHTML="";pfRoot.innerHTML="";steamRoot.innerHTML="";
+  const count=state.groups;
+  const left=53, usable=205, gap=usable/count;
+  for(let i=0;i<count;i++){
+    const x=left+i*gap+gap/2;
+    groupRoot.insertAdjacentHTML("beforeend",`
+      <g>
+        <rect x="${x-19}" y="85" width="38" height="29" rx="4" fill="#101212" stroke="#d0cfc5" stroke-width="1.4"/>
+        <rect x="${x-14}" y="89" width="28" height="4" rx="1" fill="#b7b7ae"/>
+        <circle cx="${x-8}" cy="101" r="2.5" fill="#c9a34d"/>
+        <circle cx="${x}" cy="101" r="2.5" fill="#77956d"/>
+        <circle cx="${x+8}" cy="101" r="2.5" fill="#c9a34d"/>
+        <path d="M${x-12} 114 L${x+12} 114 L${x+9} 128 L${x-9} 128Z" fill="#222526" stroke="#b8b8b0" stroke-width="1"/>
+        <path d="M${x-8} 128 L${x-5} 139 L${x+5} 139 L${x+8} 128Z" fill="#8f8f89" stroke="#171717"/>
+        <path d="M${x-4} 139 L${x-3} 144 L${x+3} 144 L${x+4} 139Z" fill="#161616"/>
+      </g>`);
+    pfRoot.insertAdjacentHTML("beforeend",`
+      <g>
+        <path d="M${x-3} 145 L${x+3} 145 L${x+5} 155 L${x+21} 163 L${x+18} 168 L${x+1} 160 L${x-2} 155Z" fill="#292b2b" stroke="#d0cfc7" stroke-width="1"/>
+        <ellipse cx="${x+1}" cy="158" rx="5" ry="2" fill="#b7a47b"/>
+      </g>`);
+  }
+  if(count>=3){
+    steamRoot.insertAdjacentHTML("beforeend",`
+      <path d="M${count===4?283:25} 112 L${count===4?292:18} 139 L${count===4?300:14} 139" stroke="#d3d0c7" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <circle cx="${count===4?300:14}" cy="140" r="3" fill="#bbb9b1"/>`);
+  }
+  if(count>=4){
+    steamRoot.insertAdjacentHTML("beforeend",`
+      <path d="M25 82 L17 106 L17 125" stroke="#d4d1c8" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M12 125 L22 125 L20 132 L14 132Z" fill="#c5c1b5"/>`);
+  }
+}
 function renderOrders(){
- const root=$('orders');root.innerHTML='';
- orders.forEach(o=>{
-  const el=document.createElement('button');el.className='order'+(o.id===selectedOrder?' selected':'')+(o.done?' done':'');el.dataset.id=o.id;
-  el.innerHTML=`<span class="num">#${fa(o.id)}</span><span class="ring ${o.remaining<6?'low':''}"></span><div class="cup">☕</div><div class="type">اسپرسو</div><div class="timer">${o.done?'تحویل شد':fa(o.remaining)+' ثانیه'}</div>`;
-  el.onclick=()=>{if(o.done)return;selectedOrder=o.id;renderOrders();say('سفارش '+fa(o.id)+' انتخاب شد.')};root.appendChild(el)
- });
- $('orderCount').textContent=fa(activeOrders().length)+' سفارش فعال';
+  const root=$("orders");root.innerHTML="";
+  if(!state.orders.length){
+    root.innerHTML='<div class="empty-work">برای شروع چالش، دکمه شروع را بزن.</div>';return;
+  }
+  state.orders.forEach(order=>{
+    const remaining=Math.max(0,Math.ceil((order.deadline-Date.now())/1000));
+    const div=document.createElement("div");
+    div.className="order"+(order.status==="ready"?" done":"")+(order.status==="waiting"?" active":"");
+    let status="";
+    if(order.status==="waiting")status="منتظر آماده‌سازی";
+    else if(order.status==="ground")status="قهوه آسیاب شد";
+    else if(order.status==="ready")status="آماده تحویل";
+    div.innerHTML=`<span>☕</span><b>اسپرسو</b>
+      <div class="time">${fmt(remaining)} ثانیه</div>
+      <div class="small">سفارش ${fmt(order.id)}</div>
+      <div class="status ${order.status!=="ready"?"wait":""}">${status}</div>`;
+    root.appendChild(div);
+  });
 }
-function updateOrderTimers(){
- orders.forEach(o=>{const el=$('orders').querySelector(`[data-id="${o.id}"]`);if(!el)return;el.querySelector('.timer').textContent=o.done?'تحویل شد':fa(o.remaining)+' ثانیه';el.querySelector('.ring').classList.toggle('low',o.remaining<6)});
- $('orderCount').textContent=fa(activeOrders().length)+' سفارش فعال';
-}
-function renderSlots(){
- const root=$('slots');root.innerHTML='';
- for(let i=0;i<3;i++){
-  const cup=readyCups[i],el=document.createElement('div');el.className='slot';
-  if(cup){el.innerHTML='<div class="cup">☕</div><div class="cup-name">اسپرسو</div><button class="deliver">تحویل سفارش</button>';el.querySelector('button').onclick=()=>deliver(cup.id)}
-  else el.innerHTML='<div class="cup" style="opacity:.18">☕</div><div class="empty">خالی</div>';
-  root.appendChild(el)
- }
- $('readyCount').textContent=fa(readyCups.length)+' فنجان آماده';
+function renderCups(){
+  const root=$("cups");root.innerHTML="";
+  if(!state.cups.length){
+    root.innerHTML='<div class="empty-work">فنجان آماده اینجا قرار می‌گیرد.</div>';return;
+  }
+  state.cups.forEach(cup=>{
+    const div=document.createElement("div");div.className="cup";
+    div.innerHTML=`<svg viewBox="0 0 50 45" aria-label="فنجان اسپرسو">
+      <defs><linearGradient id="cup${cup.id}" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#fff9e8"/><stop offset=".5" stop-color="#d9d0bb"/><stop offset="1" stop-color="#8e8370"/></linearGradient></defs>
+      <path d="M8 12 L39 12 L35 35 Q23 41 12 35Z" fill="url(#cup${cup.id})" stroke="#6d6253" stroke-width="1.4"/>
+      <path d="M39 16 Q49 13 45 24 Q42 29 37 27" fill="none" stroke="#c4b9a4" stroke-width="4"/>
+      <ellipse cx="23.5" cy="13" rx="15.5" ry="5" fill="#e7dcc5" stroke="#72624c"/>
+      <ellipse cx="23.5" cy="13" rx="12.5" ry="3.3" fill="#3b1f10"/>
+      <ellipse cx="23.5" cy="13" rx="9" ry="2" fill="#9c6030"/>
+      <path d="M13 17 L34 17" stroke="#fff" opacity=".5"/>
+      </svg>
+      <b>اسپرسو</b>
+      <button class="action" onclick="deliver(${cup.id},${cup.orderId})">تحویل سفارش ${fmt(cup.orderId)}</button>`;
+    root.appendChild(div);
+  });
 }
 function renderUpgrades(){
- $('coins').textContent=fa(coins);
- $('grinderStatus').textContent='سطح '+fa(grinderLevel)+' · '+fa(grinderTimes[grinderLevel])+' ثانیه';
- $('machineStatus').textContent=fa(groups)+' گروپ · '+fa(machineTimes[groups])+' ثانیه';
- $('grinderLevel').textContent='سطح '+fa(grinderLevel);
- $('machineLevel').textContent=fa(groups)+' گروپ';
- $('secondGrinderLevel').textContent=secondGrinder?'خریداری شده':'خریداری نشده';
- $('grinderCost').textContent=grinderLevel>=3?'حداکثر سطح':'🪙 '+fa(grinderCosts[grinderLevel]);
- $('machineCost').textContent=groups>=4?'حداکثر سطح':'🪙 '+fa(machineCosts[groups]);
- $('secondGrinderCost').textContent=secondGrinder?'خریداری شده':'🪙 '+fa(secondGrinderPrice);
- $('upgradeGrinder').disabled=grinderLevel>=3||coins<grinderCosts[grinderLevel];
- $('upgradeMachine').disabled=groups>=4||coins<machineCosts[groups];
- $('upgradeSecondGrinder').disabled=secondGrinder||coins<secondGrinderPrice;
- $('upgradeMachineFinish').disabled=qualityUpgrade||coins<5000;
+  const root=$("upgrades");root.innerHTML="";
+  upgradeDefs.forEach(item=>{
+    let purchased=false,available=true,label="خرید · "+fmt(item.price)+" سکه";
+    if(item.id==="g2"){purchased=state.grinderLevel>=2;available=state.grinderLevel===1;}
+    if(item.id==="g3"){purchased=state.grinderLevel>=3;available=state.grinderLevel===2;}
+    if(item.id==="second"){purchased=state.secondGrinder;available=!state.secondGrinder;}
+    if(item.id==="group2"){purchased=state.groups>=2;available=state.groups===1;}
+    if(item.id==="group3"){purchased=state.groups>=3;available=state.groups===2;}
+    if(item.id==="group4"){purchased=state.groups>=4;available=state.groups===3;}
+    if(item.id==="quality"){purchased=state.quality>1;label="ارتقا · "+fmt(item.price)+" سکه";}
+    if(purchased)label="خریداری شده ✓";
+    const disabled=purchased||!available||state.coins<item.price;
+    const div=document.createElement("div");div.className="upgrade";
+    div.innerHTML=`<b>${item.title}</b><p>${item.desc}</p>
+      <button class="${purchased?'secondary':'action'}" ${disabled?'disabled':''}
+      onclick="buyUpgrade('${item.id}')">${label}</button>`;
+    root.appendChild(div);
+  });
 }
-function renderAll(){renderOrders();renderSlots();renderUpgrades();$('score').textContent=fa(score);$('time').textContent=fa(timeLeft);$('progress').style.width=(timeLeft/120*100)+'%';$('startBtn').textContent=run?'چالش در حال اجراست':'▶ شروع چالش ۱۲۰ ثانیه‌ای'}
-function getSelected(){const o=orders.find(x=>x.id===selectedOrder&&!x.done);if(!o){say('اول یک سفارش فعال انتخاب کن.');return null}return o}
-function tapGrinder(){
- if(!run){say('اول چالش را شروع کن.');return}
- if(busyGrind||busyExtract){say('صبر کن عملیات فعلی تمام شود.');return}
- const o=getSelected();if(!o)return;
- if(readyCups.some(c=>c.orderId===o.id)){say('این سفارش آماده تحویل است.');return}
- if(groundFor===o.id){say('قهوه آسیاب شده؛ حالا روی دستگاه بزن.');return}
- busyGrind=true;$('grindHint').textContent='⚙️ در حال آسیاب...';say('در حال آسیاب قهوه...');
- setTimeout(()=>{busyGrind=false;if(!run)return;groundFor=o.id;$('grindHint').textContent='⚙️ آسیاب قهوه';say('آسیاب انجام شد؛ برای عصاره‌گیری روی دستگاه بزن.')},grinderTimes[grinderLevel]*1000)
+function renderAll(){
+  renderStats();renderGroups();renderOrders();renderCups();renderUpgrades();
 }
-function tapMachine(){
- if(!run){say('اول چالش را شروع کن.');return}
- if(busyGrind||busyExtract){say('صبر کن عملیات فعلی تمام شود.');return}
- const o=getSelected();if(!o)return;
- if(groundFor!==o.id){say('اول قهوه همین سفارش را آسیاب کن.');return}
- if(readyCups.length>=3){say('میز پر است؛ یک فنجان را تحویل بده.');return}
- busyExtract=true;$('machineHint').textContent='☕ در حال عصاره‌گیری...';say('در حال عصاره‌گیری اسپرسو...');
- setTimeout(()=>{
-  busyExtract=false;if(!run)return;
-  if(!orders.find(x=>x.id===o.id&&!x.done)){groundFor=null;$('machineHint').textContent='☕ عصاره‌گیری اسپرسو';return}
-  readyCups.push({id:nextId++,orderId:o.id});groundFor=null;$('machineHint').textContent='☕ عصاره‌گیری اسپرسو';renderSlots();say('اسپرسو آماده است؛ فنجان را تحویل بده.')
- },machineTimes[groups]*1000)
+function buyUpgrade(id){
+  const item=upgradeDefs.find(x=>x.id===id);
+  if(!item)return;
+  if(id==="g2"&&state.grinderLevel!==1)return;
+  if(id==="g3"&&state.grinderLevel!==2)return;
+  if(id==="second"&&state.secondGrinder)return;
+  if(id==="group2"&&state.groups!==1)return;
+  if(id==="group3"&&state.groups!==2)return;
+  if(id==="group4"&&state.groups!==3)return;
+  if(state.coins<item.price){toast("سکه کافی نیست.");return;}
+  state.coins-=item.price;
+  switch(id){
+    case "g2":state.grinderLevel=2;break;
+    case "g3":state.grinderLevel=3;break;
+    case "second":state.secondGrinder=true;break;
+    case "group2":state.groups=2;break;
+    case "group3":state.groups=3;break;
+    case "group4":state.groups=4;break;
+    case "quality":state.quality++;break;
+  }
+  renderAll();
+  toast("ارتقا با موفقیت خریداری شد.");
 }
-function deliver(id){
- if(!run){say('چالش فعال نیست.');return}
- const i=readyCups.findIndex(c=>c.id===id);if(i<0)return;
- const cup=readyCups[i],o=orders.find(x=>x.id===cup.orderId&&!x.done);
- if(!o){readyCups.splice(i,1);renderSlots();say('این سفارش دیگر فعال نیست.');return}
- o.done=true;readyCups.splice(i,1);score++;
- if(score>=100){endRun('🏆 عالی! ۱۰۰ سفارش را کامل کردی!');return}
- const next=makeOrder();orders.push(next);selectedOrder=next.id;
- while(activeOrders().length<Math.min(groups+1,5))orders.push(makeOrder());
- renderAll();say('سفارش تحویل شد! سفارش بعدی را آماده کن.')
+function makeOrder(){
+  const id=state.nextOrderId++;
+  const duration=Math.max(9,18-state.groups);
+  state.orders.push({id,status:"waiting",deadline:Date.now()+duration*1000,groundBy:null});
 }
-$('grinderTap').addEventListener('click',tapGrinder);
-$('machineTap').addEventListener('click',tapMachine);
-$('startBtn').addEventListener('click',()=>{if(!run)startRun()});
-$('resetBtn').addEventListener('click',()=>{clearInterval(runTimer);clearInterval(orderTimer);run=false;score=0;timeLeft=120;orders=[];readyCups=[];selectedOrder=null;groundFor=null;busyGrind=false;busyExtract=false;renderAll();say('آماده شروع دوباره‌ای.')});
-$('upgradeGrinder').addEventListener('click',()=>{if(grinderLevel>=3)return;const c=grinderCosts[grinderLevel];if(coins<c)return;coins-=c;grinderLevel++;renderUpgrades();say('آسیاب به سطح '+fa(grinderLevel)+' ارتقا یافت!')});
-$('upgradeMachine').addEventListener('click',()=>{if(groups>=4)return;const c=machineCosts[groups];if(coins<c)return;coins-=c;groups++;renderUpgrades();say('دستگاه به '+fa(groups)+' گروپ ارتقا یافت!')});
-$('upgradeSecondGrinder').addEventListener('click',()=>{if(secondGrinder||coins<secondGrinderPrice)return;coins-=secondGrinderPrice;secondGrinder=true;renderUpgrades();say('آسیاب دوم خریداری شد؛ قابلیت مستقل آن در نسخه بعدی تکمیل می‌شود.')});
-$('upgradeMachineFinish').addEventListener('click',()=>{if(qualityUpgrade||coins<5000)return;coins-=5000;qualityUpgrade=true;renderUpgrades();say('بهبود آزمایشی دستگاه خریداری شد!')});
+function startRun(){
+  if(state.run)return;
+  state.run=true;state.score=0;state.time=120;state.orders=[];state.cups=[];
+  state.nextOrderId=1;state.nextCupId=1;state.groundBeans=0;
+  state.busyGrinders=[false,false];state.extracting=false;
+  for(let i=0;i<Math.min(state.groups+1,5);i++)makeOrder();
+  clearInterval(state.clock);clearInterval(state.orderClock);
+  state.clock=setInterval(()=>{
+    if(!state.run)return;
+    state.time--;
+    if(state.time<=0){finishRun(true);return;}
+    renderStats();
+  },1000);
+  state.orderClock=setInterval(checkOrders,250);
+  renderAll();toast("چالش شروع شد!");
+}
+function finishRun(failed){
+  state.run=false;clearInterval(state.clock);clearInterval(state.orderClock);
+  state.busyGrinders=[false,false];state.extracting=false;
+  renderAll();
+  if(failed)showModal("زمان تمام شد","چالش به پایان رسید. ارتقاها و سکه‌های شما حفظ شده‌اند. برای شروع دوباره، چالش را از سفارش اول آغاز کن.");
+  else showModal("آفرین!","هر ۱۰۰ سفارش را تکمیل کردی!");
+}
+function checkOrders(){
+  if(!state.run)return;
+  const now=Date.now();
+  const expired=state.orders.find(o=>o.status!=="ready"&&now>=o.deadline);
+  if(expired){
+    state.run=false;
+    finishRun(true);return;
+  }
+  renderOrders();
+}
+function grind(index){
+  if(!state.run){toast("اول چالش را شروع کن.");return;}
+  if(index===1&&!state.secondGrinder){toast("اول آسیاب دوم را بخر.");return;}
+  if(state.busyGrinders[index]){toast("این آسیاب در حال کار است.");return;}
+  const target=state.orders.find(o=>o.status==="waiting");
+  if(!target){toast("سفارش منتظر آسیاب وجود ندارد.");return;}
+  state.busyGrinders[index]=true;
+  const seconds=state.grinderLevel===1?1000:state.grinderLevel===2?700:400;
+  toast("در حال آسیاب قهوه…");
+  setTimeout(()=>{
+    state.busyGrinders[index]=false;
+    if(!state.run)return;
+    if(!state.orders.includes(target)||target.status!=="waiting")return;
+    target.status="ground";target.groundBy=index;state.groundBeans++;
+    renderAll();toast("قهوه آسیاب شد؛ حالا روی دستگاه اسپرسو بزن.");
+  },seconds);
+}
+function extract(){
+  if(!state.run){toast("اول چالش را شروع کن.");return;}
+  if(state.extracting){toast("دستگاه در حال عصاره‌گیری است.");return;}
+  const target=state.orders.find(o=>o.status==="ground");
+  if(!target){toast("اول روی یکی از آسیاب‌ها بزن.");return;}
+  state.extracting=true;
+  const durations={1:2000,2:1200,3:800,4:500};
+  toast("عصاره‌گیری اسپرسو شروع شد…");
+  setTimeout(()=>{
+    state.extracting=false;
+    if(!state.run)return;
+    if(!state.orders.includes(target)||target.status!=="ground")return;
+    target.status="ready";
+    const cup={id:state.nextCupId++,orderId:target.id};
+    state.cups.push(cup);
+    renderAll();toast("اسپرسو آماده است؛ فنجان روی میز کار قرار گرفت.");
+  },durations[state.groups]);
+}
+function deliver(cupId,orderId){
+  if(!state.run){toast("چالش فعال نیست.");return;}
+  const cup=state.cups.find(c=>c.id===cupId&&c.orderId===orderId);
+  const order=state.orders.find(o=>o.id===orderId&&o.status==="ready");
+  if(!cup||!order){toast("این سفارش آماده تحویل نیست.");return;}
+  state.cups=state.cups.filter(c=>c.id!==cupId);
+  state.orders=state.orders.filter(o=>o.id!==orderId);
+  state.score++;
+  if(state.score>=100){finishRun(false);return;}
+  while(state.orders.length<Math.min(state.groups+1,5))makeOrder();
+  renderAll();toast("سفارش تحویل شد!");
+}
 renderAll();
 </script>
 </body>
